@@ -7,8 +7,8 @@ class PriorityQueue<T> {
 
   int Function(T)? _priorityFunction;
 
-  PriorityQueue(int Function(T) priorityFunction) : _priorityFunction = priorityFunction;
-  PriorityQueue.withOutPriorityFunction();
+  PriorityQueue();
+  PriorityQueue.withPriorityFunction(int Function(T) priorityFunction) : _priorityFunction = priorityFunction;
 
   /// Adds a new [value] and calculates the priority using [_priorityFunction]
   /// throws if [_priorityFunction] is null
@@ -54,6 +54,7 @@ class PriorityQueue<T> {
 
   get isEmpty => _length == 0;
   get isNotEmpty => _length != 0;
+  get size => _length;
 
   @override
   String toString() {

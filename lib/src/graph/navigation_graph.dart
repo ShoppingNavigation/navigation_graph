@@ -55,7 +55,7 @@ class NavigationGraph {
     final distances = <Node, double>{};
     final previous = <Node, Node?>{};
     // todo: replace with fibonacci or brodal queue for faster computation (O(e*log n) instead of O(n**2))
-    final remaining = PriorityQueue<Node>((node) => distances[node]!.toInt())..addWithPriority(0, start);
+    final remaining = PriorityQueue<Node>()..addWithPriority(0, start);
     for (final node in _nodes) {
       if (node != start) {
         distances[node] = double.infinity;
