@@ -42,6 +42,16 @@ class PriorityQueue<T> {
     return _pseudoQueue[minPriority]!.removeFirst();
   }
 
+  /// checks if a provided value is already somewhere in the queue
+  bool isInQueue(T value) {
+    for (final subqueue in _pseudoQueue.entries) {
+      if (subqueue.value.contains(value)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   get isEmpty => _length == 0;
   get isNotEmpty => _length != 0;
 

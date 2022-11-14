@@ -1,4 +1,5 @@
 import 'package:store_navigation_graph/src/graph/node.dart';
+import 'package:store_navigation_graph/src/graph/results/route_to_result.dart';
 
 import '../utils/priority_queue.dart';
 
@@ -47,35 +48,60 @@ class NavigationGraph {
     _adjacencyMatrix[secondPosition][firstPosition] = distance;
   }
 
-  /// Routes the user from the [source] to the chosen [destination]
+  /// Routes the user from the [start] to the chosen [destination]
   /// uses the dijkstra algorithm to find the shortest path
-  void routeTo(Node source, Node destination) {
+  /// Returns the route and the distance. Result is null if no route was found
+  RouteToResult? routeTo(Node start, Node destination) {
     final distances = <Node, double>{};
-    final previous = {};
+    final previous = <Node, Node?>{};
     // todo: replace with fibonacci or brodal queue for faster computation (O(e*log n) instead of O(n**2))
-    final remaining = PriorityQueue<Node>((node) => distances[node]!.toInt())..addWithPriority(0, source);
+    final remaining = PriorityQueue<Node>((node) => distances[node]!.toInt())..addWithPriority(0, start);
     for (final node in _nodes) {
-      distances[node] = double.infinity;
+      if (node != start) {
+        distances[node] = double.infinity;
+        previous[node] = null;
+      }
     }
-    distances[source] = 0;
+    distances[start] = 0;
 
     while (remaining.isNotEmpty) {
       final n = remaining.popMin();
-      for (var neighbour in getAdjacentNodes(n).entries) {
+      final adjacentNodes = getAdjacentNodes(n);
+      for (var neighbour in adjacentNodes.entries) {
         final newDistance = distances[n]! + neighbour.value;
         final oldBestDistance = distances[neighbour.key]!;
 
         if (newDistance < oldBestDistance) {
-          remaining.addWithPriority(neighbour.value.toInt(), neighbour.key);
+          if (!remaining.isInQueue(neighbour.key)) {
+            remaining.addWithPriority(newDistance.toInt(), neighbour.key);
+          }
           distances[neighbour.key] = newDistance;
-          previous[n] = neighbour.key;
+          previous[neighbour.key] = n;
         }
       }
     }
 
-    print("Distance from ${source.name} to ${destination.name} = ${distances[destination]}");
-    print("With steps: $previous");
+    if (distances[destination] == double.infinity || previous.isEmpty || previous[destination] == null) {
+      return null;
+    }
+
+    return RouteToResult(distances[destination]!, _spanningTreeToRoute(previous, start, destination));
   }
+
+  /// calculates the route from a spanning tree
+  List<Node> _spanningTreeToRoute(Map<Node, Node?> spanningTree, Node start, Node destination) {
+    final route = <Node>[destination];
+    while (route.last != start) {
+      if (spanningTree[route.last] == null) {
+        break;
+      }
+      route.add(spanningTree[route.last]!);
+    }
+    return route.reversed.toList();
+  }
+
+  /// gets the size of the graph
+  get nodeCount => _nodes.length;
 
   @override
   String toString() {
