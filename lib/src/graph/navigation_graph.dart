@@ -1,4 +1,6 @@
 import 'package:store_navigation_graph/src/graph/node.dart';
+import 'package:store_navigation_graph/src/graph/results/dijkstra_result.dart';
+import 'package:store_navigation_graph/src/graph/results/route_to_all_result.dart';
 import 'package:store_navigation_graph/src/graph/results/route_to_result.dart';
 
 import '../utils/priority_queue.dart';
@@ -32,7 +34,8 @@ class NavigationGraph {
     final adjacentNodes = <Node, double>{};
     for (int i = 0; i < possibleAdjacentNodes.length; i++) {
       if (possibleAdjacentNodes[i] != 0) {
-        adjacentNodes.putIfAbsent(_nodes.elementAt(i), () => possibleAdjacentNodes[i]);
+        adjacentNodes.putIfAbsent(
+            _nodes.elementAt(i), () => possibleAdjacentNodes[i]);
       }
     }
 
@@ -52,6 +55,60 @@ class NavigationGraph {
   /// uses the dijkstra algorithm to find the shortest path
   /// Returns the route and the distance. Result is null if no route was found
   RouteToResult? routeTo(Node start, Node destination) {
+    final result = _dijkstra(start);
+
+    if (result.distances[destination] == double.infinity ||
+        result.previous.isEmpty ||
+        result.previous[destination] == null) {
+      return null;
+    }
+
+    return RouteToResult(result.distances[destination]!,
+        _spanningTreeToRoute(result.previous, start, destination));
+  }
+
+  /// Calculates a route from [start] to all items in [destinations] in a consecutive way
+  /// does so by searching the closest node from start to any in destination and then
+  /// from new found destination to any in destination and so on
+  RouteToAllResult routeToAll(Node start, List<Node> destinations) {
+    final route = <Node>[];
+    double distance = 0;
+    for (int i = 0; i < destinations.length; i++) {
+      final result = _dijkstra(start);
+      for (var element in result.distances.entries
+          .where((element) => element.key != start)) {
+        // take the first element that matches any item in desinations and add it the route.
+        // remove it from the destinations
+        if (destinations.contains(element.key)) {
+          route.addAll(
+              _spanningTreeToRoute(result.previous, start, element.key));
+          distance += result.distances[element.key]!;
+          destinations.remove(element.key);
+          start = element.key;
+          break;
+        }
+      }
+    }
+
+    return RouteToAllResult(distance: distance, route: route);
+  }
+
+  /// calculates the route from a spanning tree
+  List<Node> _spanningTreeToRoute(
+      Map<Node, Node?> spanningTree, Node start, Node destination) {
+    final route = <Node>[destination];
+    while (route.last != start) {
+      if (spanningTree[route.last] == null) {
+        break;
+      }
+      route.add(spanningTree[route.last]!);
+    }
+    return route.reversed.toList();
+  }
+
+  /// Calculates a spanning tree by using dijkstra
+  /// distances are always sorted from lowest to highest
+  DijkstraResult _dijkstra(Node start) {
     final distances = <Node, double>{};
     final previous = <Node, Node?>{};
     // todo: replace with fibonacci or brodal queue for faster computation (O(e*log n) instead of O(n**2))
@@ -81,23 +138,11 @@ class NavigationGraph {
       }
     }
 
-    if (distances[destination] == double.infinity || previous.isEmpty || previous[destination] == null) {
-      return null;
-    }
-
-    return RouteToResult(distances[destination]!, _spanningTreeToRoute(previous, start, destination));
-  }
-
-  /// calculates the route from a spanning tree
-  List<Node> _spanningTreeToRoute(Map<Node, Node?> spanningTree, Node start, Node destination) {
-    final route = <Node>[destination];
-    while (route.last != start) {
-      if (spanningTree[route.last] == null) {
-        break;
-      }
-      route.add(spanningTree[route.last]!);
-    }
-    return route.reversed.toList();
+    return DijkstraResult(
+      distances: Map.fromEntries(distances.entries.toList()
+        ..sort((a, b) => a.value.compareTo(b.value))),
+      previous: previous,
+    );
   }
 
   /// gets the size of the graph
