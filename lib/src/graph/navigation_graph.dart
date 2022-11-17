@@ -73,15 +73,15 @@ class NavigationGraph {
   RouteToAllResult routeToAll(Node start, List<Node> destinations) {
     final route = <Node>[];
     double distance = 0;
-    for (int i = 0; i < destinations.length; i++) {
+
+    // the i < destinations.length gets evaluated every time, so we need to use a predefined
+    // variable here
+    final iterations = destinations.length;
+    for (int i = 0; i < iterations; i++) {
       final result = _dijkstra(start);
-      for (var element in result.distances.entries
-          .where((element) => element.key != start)) {
-        // take the first element that matches any item in desinations and add it the route.
-        // remove it from the destinations
+      for (var element in result.distances.entries.where((element) => element.key != start)) {
         if (destinations.contains(element.key)) {
-          route.addAll(
-              _spanningTreeToRoute(result.previous, start, element.key));
+          route.addAll(_spanningTreeToRoute(result.previous, start, element.key));
           distance += result.distances[element.key]!;
           destinations.remove(element.key);
           start = element.key;
