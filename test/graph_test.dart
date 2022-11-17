@@ -63,11 +63,11 @@ void main() {
 
       assert(result != null);
       assert(result!.distance == 6);
-      assert(result!.steps.length == 4);
-      assert(result!.steps[0] == v0);
-      assert(result!.steps[1] == v3);
-      assert(result!.steps[2] == v5);
-      assert(result!.steps[3] == v9);
+      assert(result!.route.length == 4);
+      assert(result!.route[0] == v0);
+      assert(result!.route[1] == v3);
+      assert(result!.route[2] == v5);
+      assert(result!.route[3] == v9);
     });
 
     test('Should find valid path (Case 2)', () {
@@ -75,10 +75,10 @@ void main() {
 
       assert(result != null);
       assert(result!.distance == 7);
-      assert(result!.steps.length == 3);
-      assert(result!.steps[0] == v2);
-      assert(result!.steps[1] == v9);
-      assert(result!.steps[2] == v6);
+      assert(result!.route.length == 3);
+      assert(result!.route[0] == v2);
+      assert(result!.route[1] == v9);
+      assert(result!.route[2] == v6);
     });
 
     test('Should fail when not connected', () {

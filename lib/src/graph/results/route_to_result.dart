@@ -5,7 +5,7 @@ class RouteToResult {
   final double distance;
 
   /// all the steps required from start to desination
-  final List<Node> steps;
+  final List<Node> route;
 
-  const RouteToResult(this.distance, this.steps);
+  const RouteToResult(this.distance, this.route);
 }

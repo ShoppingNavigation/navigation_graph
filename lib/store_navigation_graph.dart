@@ -1,6 +1,9 @@
-/// Support for the logic behind the store navigation.
 library store_navigation_graph;
 
+// graph;
 export 'src/graph/navigation_graph.dart';
+export 'src/graph/node.dart';
 
-// TODO: Export any libraries intended for clients of this package.
+// results
+export 'src/graph/results/route_to_all_result.dart';
+export 'src/graph/results/route_to_result.dart';

@@ -28,15 +28,15 @@ A minimal example to route in a graph with just two nodes:
 ```dart
 final Node nodeA = Node('A');
 final Node nodeB = Node('B');
-final NavigationGraph graph = NavigationGraph();
+final NavigationGraph graph = NavigationGraph(nodes: [nodeA, nodeB]);
 
 // create an unidirectional connection between node a and node b
 // (no need to do '.connect(nodeB, nodeA)' as well)
-graph.connect(nodeA, nodeB); 
+graph.connect(nodeA, nodeB, 2); 
 
-final RouteToResult result = graph.routeTo(nodeA, nodeB);
+final RouteToResult? result = graph.routeTo(nodeA, nodeB);
 ```
 
-An example with a more complicated graph can be found in the examples folder.
+An example with a more complicated graph can be found in the examples folder (`example/more_complicated_example.dart`).
 The following graph was used in the example:
-![test_graph](/assets/test_graph.png)
+![test_graph](/example/test_graph.png)
