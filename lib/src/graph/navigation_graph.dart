@@ -70,7 +70,8 @@ class NavigationGraph {
   /// Calculates a route from [start] to all items in [destinations] in a consecutive way
   /// does so by searching the closest node from start to any in destination and then
   /// from new found destination to any in destination and so on
-  RouteToAllResult routeToAll(Node start, List<Node> destinations) {
+  /// Returns null if at least one node cannot be reached
+  RouteToAllResult? routeToAll(Node start, List<Node> destinations) {
     final route = <Node>[];
     double distance = 0;
 
@@ -81,6 +82,9 @@ class NavigationGraph {
       final result = _dijkstra(start);
       for (var element in result.distances.entries.where((element) => element.key != start)) {
         if (destinations.contains(element.key)) {
+          if (result.distances[element.key]!.isInfinite) {
+            return null;
+          }
           route.addAll(_spanningTreeToRoute(result.previous, start, element.key));
           distance += result.distances[element.key]!;
           destinations.remove(element.key);

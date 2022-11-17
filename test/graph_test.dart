@@ -4,9 +4,6 @@ import 'package:test/test.dart';
 
 void main() {
   group('Plain Graph Theory -', () {
-    setUp(() {
-      // Additional setup goes here.
-    });
 
     test('Should create a graph', () {
       var graph = NavigationGraph(nodes: [Node('A')]);
@@ -91,7 +88,7 @@ void main() {
     });
   });
 
-  group('Pathfinding in Graph to multiple Nodes', () {
+  group('Pathfinding in Graph to multiple Nodes - ', () {
     NavigationGraph? graph;
     final v0 = Node('v0');
     final v1 = Node('v1');
@@ -128,8 +125,32 @@ void main() {
     test('Should find valid route (Case 1)', () {
       final result = graph!.routeToAll(v0, [v1, v3]);
 
-      print(result.distance);
-      print(result.route);
+      assert(result != null);
+      assert(result!.distance == 5);
+      assert(result!.route[0] == v0);
+      assert(result!.route[1] == v3);
+      assert(result!.route[2] == v3);
+      assert(result!.route[3] == v0);
+      assert(result!.route[4] == v1);
+    });
+
+    test('Should find valid route (Case 2)', () {
+      final result = graph!.routeToAll(v0, [v6, v7]);
+
+      assert(result != null);
+      assert(result!.distance == 11);
+      assert(result!.route[0] == v0);
+      assert(result!.route[2] == v5);
+      assert(result!.route[3] == v7);
+      assert(result!.route[4] == v7);
+      assert(result!.route[5] == v9);
+      assert(result!.route[6] == v6);
+    });
+
+    test('Should fail when not connected', () {
+      final result = graph!.routeToAll(v0, [unconnected]);
+
+      assert(result == null);
     });
   });
 }
