@@ -2,16 +2,13 @@ class Node {
   /// Name of the node, needs to be unique
   final String name;
 
-  const Node(this.name);
+  /// x coordinate for displaying
+  double? X;
 
-  /// gets the distance to a given node
-  // double distanceTo(Node node) {
-  //   if (!neighbours.containsKey(node)) {
-  //     throw Exception('Node ${node.name} does not exist as a neighbour of $name');
-  //   }
+  /// y coordinate for displaying
+  double? Y;
 
-  //   return neighbours[node]!;
-  // }
+  Node(this.name, {this.X, this.Y});
 
   /// Checks if a given node [other] is the same as this
   bool equals(Node other) {

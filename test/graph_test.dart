@@ -1,4 +1,3 @@
-import 'package:store_navigation_graph/src/graph/node.dart';
 import 'package:store_navigation_graph/store_navigation_graph.dart';
 import 'package:test/test.dart';
 
