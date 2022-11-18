@@ -3,15 +3,15 @@ class Node {
   final String name;
 
   /// x coordinate for displaying
-  double? X;
+  double x;
 
   /// y coordinate for displaying
-  double? Y;
+  double y;
 
   /// contains a list of adjacent nodes and the respective distance
   Map<Node, double>? _adjacentNodes;
 
-  Node(this.name, {this.X, this.Y});
+  Node(this.name, {this.x = 0, this.y = 0});
 
   /// sets the adjacent nodes of [this]
   /// DO NOT USE WHEN YOU DO NOT KNOW EXACTLY WHAT YOU DO
