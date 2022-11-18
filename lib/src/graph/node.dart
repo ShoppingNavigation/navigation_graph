@@ -2,16 +2,10 @@ class Node {
   /// Name of the node, needs to be unique
   final String name;
 
-  /// x coordinate for displaying
-  double x;
-
-  /// y coordinate for displaying
-  double y;
-
   /// contains a list of adjacent nodes and the respective distance
   Map<Node, double>? _adjacentNodes;
 
-  Node(this.name, {this.x = 0, this.y = 0});
+  Node(this.name);
 
   /// sets the adjacent nodes of [this]
   /// DO NOT USE WHEN YOU DO NOT KNOW EXACTLY WHAT YOU DO
