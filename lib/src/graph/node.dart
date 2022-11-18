@@ -21,7 +21,7 @@ class Node {
   }
 
   /// gets all adjacent nodes
-  get adjacentNodes => _adjacentNodes;
+  Map<Node, double> get adjacentNodes => _adjacentNodes ?? <Node, double>{};
 
   /// Checks if a given node [other] is the same as this
   bool equals(Node other) {

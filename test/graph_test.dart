@@ -16,10 +16,23 @@ void main() {
 
       graph.connect(a, b, 5);
 
-      final adjacentToA = graph.getAdjacentNodes(a);
+      final adjacentToA = a.adjacentNodes;
       assert(adjacentToA.length == 1);
       assert(adjacentToA.keys.first == b);
       assert(adjacentToA.values.first == 5);
+    });
+
+    test('Should generate correct edge table', () {
+      final a = Node('A');
+      final b = Node('B');
+      final graph = NavigationGraph(nodes: [a, b]);
+
+      graph.connect(a, b, 5);
+
+      final edgeTable = graph.generateEdgeTable();
+      assert(edgeTable.length == 1);
+      assert(edgeTable.first.first == a);
+      assert(edgeTable.first.second == b);
     });
   });
 

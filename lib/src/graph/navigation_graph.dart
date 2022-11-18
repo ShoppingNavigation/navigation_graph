@@ -1,3 +1,4 @@
+import 'package:store_navigation_graph/src/graph/edge.dart';
 import 'package:store_navigation_graph/src/graph/node.dart';
 import 'package:store_navigation_graph/src/graph/results/dijkstra_result.dart';
 import 'package:store_navigation_graph/src/graph/results/route_to_all_result.dart';
@@ -41,12 +42,31 @@ class NavigationGraph {
     final adjacentNodes = <Node, double>{};
     for (int i = 0; i < possibleAdjacentNodes.length; i++) {
       if (possibleAdjacentNodes[i] != 0) {
-        adjacentNodes.putIfAbsent(
-            nodes.elementAt(i), () => possibleAdjacentNodes[i]);
+        adjacentNodes.putIfAbsent(nodes.elementAt(i), () => possibleAdjacentNodes[i]);
       }
     }
 
     return adjacentNodes;
+  }
+
+  /// returns a list of all edges.
+  /// Every edge only exists once in this list
+  List<Edge> generateEdgeTable() {
+    final edges = <Edge>[];
+    for (final node in nodes) {
+      for (final adjacentNode in node.adjacentNodes.keys) {
+        // if some constellation of these two nodes already exist in the edge table
+        // we skip this round
+        if (edges.any((element) => element.first.equals(node) && element.second.equals(adjacentNode)) ||
+            edges.any((element) => element.first.equals(adjacentNode) && element.second.equals(node))) {
+          continue;
+        }
+
+        edges.add(Edge(node, adjacentNode));
+      }
+    }
+
+    return edges;
   }
 
   /// Connects the two nodes [first] and [second] through an edge with a length of [distance]
@@ -71,8 +91,7 @@ class NavigationGraph {
       return null;
     }
 
-    return RouteToResult(result.distances[destination]!,
-        _spanningTreeToRoute(result.previous, start, destination));
+    return RouteToResult(result.distances[destination]!, _spanningTreeToRoute(result.previous, start, destination));
   }
 
   /// Calculates a route from [start] to all items in [destinations] in a consecutive way
@@ -106,8 +125,7 @@ class NavigationGraph {
   }
 
   /// calculates the route from a spanning tree
-  List<Node> _spanningTreeToRoute(
-      Map<Node, Node?> spanningTree, Node start, Node destination) {
+  List<Node> _spanningTreeToRoute(Map<Node, Node?> spanningTree, Node start, Node destination) {
     final route = <Node>[destination];
     while (route.last != start) {
       if (spanningTree[route.last] == null) {
@@ -151,8 +169,7 @@ class NavigationGraph {
     }
 
     return DijkstraResult(
-      distances: Map.fromEntries(distances.entries.toList()
-        ..sort((a, b) => a.value.compareTo(b.value))),
+      distances: Map.fromEntries(distances.entries.toList()..sort((a, b) => a.value.compareTo(b.value))),
       previous: previous,
     );
   }
