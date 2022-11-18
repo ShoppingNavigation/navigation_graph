@@ -54,15 +54,15 @@ class NavigationGraph {
   List<Edge> generateEdgeTable() {
     final edges = <Edge>[];
     for (final node in nodes) {
-      for (final adjacentNode in node.adjacentNodes.keys) {
+      for (final adjacentNode in node.adjacentNodes.entries) {
         // if some constellation of these two nodes already exist in the edge table
         // we skip this round
-        if (edges.any((element) => element.first.equals(node) && element.second.equals(adjacentNode)) ||
-            edges.any((element) => element.first.equals(adjacentNode) && element.second.equals(node))) {
+        if (edges.any((element) => element.first.equals(node) && element.second.equals(adjacentNode.key)) ||
+            edges.any((element) => element.first.equals(adjacentNode.key) && element.second.equals(node))) {
           continue;
         }
 
-        edges.add(Edge(node, adjacentNode));
+        edges.add(Edge(node, adjacentNode.key, distance: adjacentNode.value));
       }
     }
 
