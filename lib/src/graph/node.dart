@@ -3,7 +3,8 @@ class Node {
   final String name;
 
   /// contains a list of adjacent nodes and the respective distance
-  Map<Node, double>? _adjacentNodes;
+  /// sadly, we have to use dynamic, but the type should be TNode
+  Map<dynamic, double>? _adjacentNodes;
 
   Node(this.name);
 
@@ -15,7 +16,8 @@ class Node {
   }
 
   /// gets all adjacent nodes
-  Map<Node, double> get adjacentNodes => _adjacentNodes ?? <Node, double>{};
+  Map<TNode, double> adjacentNodes<TNode extends Node>() =>
+      _adjacentNodes?.map((key, value) => MapEntry(key as TNode, value)) ?? <TNode, double>{};
 
   /// Checks if a given node [other] is the same as this
   bool equals(Node other) {

@@ -16,7 +16,7 @@ void main() {
 
       graph.connect(a, b, 5);
 
-      final adjacentToA = a.adjacentNodes;
+      final adjacentToA = a.adjacentNodes();
       assert(adjacentToA.length == 1);
       assert(adjacentToA.keys.first == b);
       assert(adjacentToA.values.first == 5);

@@ -1,10 +1,10 @@
 import 'package:store_navigation_graph/store_navigation_graph.dart';
 
-class Edge {
+class Edge<TNode extends Node> {
   /// first connected node
-  final Node first;
+  final TNode first;
   /// second connected node
-  final Node second;
+  final TNode second;
 
   /// distance between both nodes
   final double distance;
