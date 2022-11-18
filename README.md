@@ -5,6 +5,7 @@ A package containing a simple graph implementation and important graph algorithm
 With this package you are able to
 - create a simple graph with as many nodes as you want
 - connect multiple nodes
+- generate a list of all nodes, which contain a list of all adjacent nodes
 - pathfind from any node to any other node (1:1 routing)
 - pathfind from any node to a list of other nodes (1:1^n routing, meaning creating a route to n nodes without re-visiting the first node)
 

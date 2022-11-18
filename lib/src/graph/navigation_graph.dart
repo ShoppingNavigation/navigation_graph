@@ -28,6 +28,13 @@ class NavigationGraph {
     return matrix;
   }
 
+  /// refreshes the adjacent nodes of every node object in [_nodes]
+  void _refreshAdjacentNodes(List<Node> nodes) {
+    for (final node in nodes) {
+      node.setAdjacentNodes(getAdjacentNodes(node));
+    }
+  }
+
   /// Returns a map of all adjacent nodes of [node] with their respective distance
   Map<Node, double> getAdjacentNodes(Node node) {
     final possibleAdjacentNodes = _adjacencyMatrix[_nodes.indexOf(node)];
@@ -49,6 +56,7 @@ class NavigationGraph {
 
     _adjacencyMatrix[firstPosition][secondPosition] = distance;
     _adjacencyMatrix[secondPosition][firstPosition] = distance;
+    _refreshAdjacentNodes([first, second]);
   }
 
   /// Routes the user from the [start] to the chosen [destination]
@@ -127,7 +135,7 @@ class NavigationGraph {
 
     while (remaining.isNotEmpty) {
       final n = remaining.popMin();
-      final adjacentNodes = getAdjacentNodes(n);
+      final adjacentNodes = n.adjacentNodes;
       for (var neighbour in adjacentNodes.entries) {
         final newDistance = distances[n]! + neighbour.value;
         final oldBestDistance = distances[neighbour.key]!;
