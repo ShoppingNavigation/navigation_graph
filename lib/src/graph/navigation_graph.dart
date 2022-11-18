@@ -9,11 +9,11 @@ typedef AdjacencyMatrix = List<List<double>>;
 
 /// Quasi-Immutable navigation graph
 class NavigationGraph {
-  final List<Node> _nodes;
+  final List<Node> nodes;
   late AdjacencyMatrix _adjacencyMatrix;
 
-  NavigationGraph({required List<Node> nodes}) : _nodes = nodes {
-    _adjacencyMatrix = _adjacencyTableFromNodes(_nodes.length);
+  NavigationGraph({required this.nodes}) {
+    _adjacencyMatrix = _adjacencyTableFromNodes(nodes.length);
   }
 
   /// Generates an empty adjacency table from a given [size]
@@ -28,7 +28,7 @@ class NavigationGraph {
     return matrix;
   }
 
-  /// refreshes the adjacent nodes of every node object in [_nodes]
+  /// refreshes the adjacent nodes of every node object in [nodes]
   void _refreshAdjacentNodes(List<Node> nodes) {
     for (final node in nodes) {
       node.setAdjacentNodes(getAdjacentNodes(node));
@@ -37,12 +37,12 @@ class NavigationGraph {
 
   /// Returns a map of all adjacent nodes of [node] with their respective distance
   Map<Node, double> getAdjacentNodes(Node node) {
-    final possibleAdjacentNodes = _adjacencyMatrix[_nodes.indexOf(node)];
+    final possibleAdjacentNodes = _adjacencyMatrix[nodes.indexOf(node)];
     final adjacentNodes = <Node, double>{};
     for (int i = 0; i < possibleAdjacentNodes.length; i++) {
       if (possibleAdjacentNodes[i] != 0) {
         adjacentNodes.putIfAbsent(
-            _nodes.elementAt(i), () => possibleAdjacentNodes[i]);
+            nodes.elementAt(i), () => possibleAdjacentNodes[i]);
       }
     }
 
@@ -51,8 +51,8 @@ class NavigationGraph {
 
   /// Connects the two nodes [first] and [second] through an edge with a length of [distance]
   void connect(Node first, Node second, double distance) {
-    final firstPosition = _nodes.indexOf(first);
-    final secondPosition = _nodes.indexOf(second);
+    final firstPosition = nodes.indexOf(first);
+    final secondPosition = nodes.indexOf(second);
 
     _adjacencyMatrix[firstPosition][secondPosition] = distance;
     _adjacencyMatrix[secondPosition][firstPosition] = distance;
@@ -125,7 +125,7 @@ class NavigationGraph {
     final previous = <Node, Node?>{};
     // todo: replace with fibonacci or brodal queue for faster computation (O(e*log n) instead of O(n**2))
     final remaining = PriorityQueue<Node>()..addWithPriority(0, start);
-    for (final node in _nodes) {
+    for (final node in nodes) {
       if (node != start) {
         distances[node] = double.infinity;
         previous[node] = null;
@@ -158,7 +158,7 @@ class NavigationGraph {
   }
 
   /// gets the size of the graph
-  get nodeCount => _nodes.length;
+  get nodeCount => nodes.length;
 
   @override
   String toString() {
