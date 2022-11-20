@@ -83,7 +83,7 @@ class NavigationGraph<TNode extends Node> {
   /// Routes the user from the [start] to the chosen [destination]
   /// uses the dijkstra algorithm to find the shortest path
   /// Returns the route and the distance. Result is null if no route was found
-  RouteToResult? routeTo(TNode start, TNode destination) {
+  RouteToResult<TNode>? routeTo(TNode start, TNode destination) {
     final result = _dijkstra(start);
 
     if (result.distances[destination] == double.infinity ||
