@@ -139,11 +139,11 @@ void main() {
 
       assert(result != null);
       assert(result!.distance == 5);
-      assert(result!.route[0] == v0);
-      assert(result!.route[1] == v3);
-      assert(result!.route[2] == v3);
-      assert(result!.route[3] == v0);
-      assert(result!.route[4] == v1);
+      assert(result!.route[0][0] == v0);
+      assert(result!.route[0][1] == v3);
+      assert(result!.route[1][0] == v3);
+      assert(result!.route[1][1] == v0);
+      assert(result!.route[1][2] == v1);
     });
 
     test('Should find valid route (Case 2)', () {
@@ -151,12 +151,13 @@ void main() {
 
       assert(result != null);
       assert(result!.distance == 11);
-      assert(result!.route[0] == v0);
-      assert(result!.route[2] == v5);
-      assert(result!.route[3] == v7);
-      assert(result!.route[4] == v7);
-      assert(result!.route[5] == v9);
-      assert(result!.route[6] == v6);
+      assert(result!.route[0][0] == v0);
+      assert(result!.route[0][1] == v3);
+      assert(result!.route[0][2] == v5);
+      assert(result!.route[0][3] == v7);
+      assert(result!.route[1][0] == v7);
+      assert(result!.route[1][1] == v9);
+      assert(result!.route[1][2] == v6);
     });
 
     test('Should fail when not connected', () {

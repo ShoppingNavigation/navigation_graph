@@ -99,8 +99,8 @@ class NavigationGraph<TNode extends Node> {
   /// does so by searching the closest node from start to any in destination and then
   /// from new found destination to any in destination and so on
   /// Returns null if at least one node cannot be reached
-  RouteToAllResult? routeToAll(TNode start, List<TNode> destinations) {
-    final route = <TNode>[];
+  RouteToAllResult<TNode>? routeToAll(TNode start, List<TNode> destinations) {
+    final List<List<TNode>> route = [];
     double distance = 0;
 
     // the i < destinations.length gets evaluated every time, so we need to use a predefined
@@ -113,7 +113,7 @@ class NavigationGraph<TNode extends Node> {
           if (result.distances[element.key]!.isInfinite) {
             return null;
           }
-          route.addAll(_spanningTreeToRoute(result.previous, start, element.key));
+          route.add(_spanningTreeToRoute(result.previous, start, element.key));
           distance += result.distances[element.key]!;
           destinations.remove(element.key);
           start = element.key;
