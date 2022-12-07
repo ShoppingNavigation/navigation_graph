@@ -80,6 +80,18 @@ class NavigationGraph<TNode extends Node> {
     _refreshAdjacentTNodes([first, second]);
   }
 
+  /// Connects the two nodes named [first] and [second] through an edge with a length of [distance]
+  void connectNamed(String first, String second, double distance){
+    final firstNode = nodes.firstWhere((e) => e.name == first);
+    final secondNode = nodes.firstWhere((e) => e.name == second);
+    final firstPosition = nodes.indexOf(firstNode);
+    final secondPosition = nodes.indexOf(secondNode);
+
+    _adjacencyMatrix[firstPosition][secondPosition] = distance;
+    _adjacencyMatrix[secondPosition][firstPosition] = distance;
+    _refreshAdjacentTNodes([firstNode, secondNode]);
+  }
+
   /// Routes the user from the [start] to the chosen [destination]
   /// uses the dijkstra algorithm to find the shortest path
   /// Returns the route and the distance. Result is null if no route was found

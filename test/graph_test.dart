@@ -22,6 +22,19 @@ void main() {
       assert(adjacentToA.values.first == 5);
     });
 
+    test('Should add connection by node names to graph', () {
+      final a = Node('A');
+      final b = Node('B');
+      final graph = NavigationGraph(nodes: [a, b]);
+
+      graph.connectNamed('A', 'B', 5);
+
+      final adjacentToA = a.adjacentNodes();
+      assert(adjacentToA.length == 1);
+      assert(adjacentToA.keys.first == b);
+      assert(adjacentToA.values.first == 5);
+    });
+
     test('Should generate correct edge table', () {
       final a = Node('A');
       final b = Node('B');
